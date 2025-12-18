@@ -375,7 +375,7 @@
 			const A = (window.Scratch && window.Scratch.ArgumentType) ? window.Scratch.ArgumentType : { STRING: 'string', NUMBER: 'number' };
 			const BUTTON = (B && B.BUTTON) ? B.BUTTON : B.COMMAND;
             return {
-				id: 'leaderboard_and_achievements',
+				id: 'leaderboard',
 				name: this._t('extName'),
 				color1: '#3494fc',
 				color2: '#3494fc',
