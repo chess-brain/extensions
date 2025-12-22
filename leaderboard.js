@@ -1037,12 +1037,26 @@
 		}
 	}
 
-	if (window && window.Scratch && window.Scratch.extensions && window.Scratch.extensions.register) {
-		window.Scratch.extensions.register(new Leaderboard());
-	} else if (typeof window !== 'undefined') {
-		window.LeaderboardExtension = new Leaderboard();
-	} else if (typeof module !== 'undefined' && module.exports) {
-		module.exports = Leaderboard;
+	(function registerFlexible() {
+		try {
+			if (typeof window !== 'undefined') {
+				if (window.Scratch && window.Scratch.extensions && typeof window.Scratch.extensions.register === 'function') {
+					try {
+						window.Scratch.extensions.register(new Leaderboard());
+						return;
+					} catch (e) {
+						console.error('Leaderboard: error while registering with Scratch.extensions.register:', e);
+					}
+				}
+				// attach to window for manual registration or debugging
+				try { window.LeaderboardExtension = new Leaderboard(); } catch (e) { console.error('Leaderboard: cannot create instance on window:', e); }
+			}
+			if (typeof module !== 'undefined' && module.exports) {
+				try { module.exports = Leaderboard; } catch (e) { /* ignore */ }
+			}
+	} catch (e) {
+		try { console.error('Leaderboard: unexpected error during registration:', e); } catch (e2) {}
 	}
+	})();
 })();
 
