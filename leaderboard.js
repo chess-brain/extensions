@@ -416,6 +416,7 @@
 						arguments: { ID: { type: A.STRING, defaultValue: 'achv1' }, TAG: { type: A.STRING, defaultValue: '默认标签' }, PLAYER: { type: A.STRING, defaultValue: '玩家' } } },
 					{ opcode: 'toggleAchievementsDisplay', blockType: B.COMMAND, text: '🏆 ' + this._t('toggleAchievementsDisplay'),
 						arguments: { TOGGLE: {type: A.STRING, menu: 'toggle'}, TAG: { type: A.STRING, defaultValue: '默认标签' }, PLAYER: { type: A.STRING, defaultValue: '玩家' } } }
+					,{ opcode: 'resetAllAchievements', blockType: B.COMMAND, text: '🏆 清空成就表单' }
 				],
 				menus: {
                     toggle: [
@@ -687,6 +688,13 @@
 			const all = this._loadAll();
 			const unlocked = all.__achievements_unlocked || {};
 			return !!(unlocked[player] && unlocked[player][tag] && unlocked[player][tag][id]);
+		}
+
+		resetAllAchievements() {
+			const all = this._loadAll();
+			if (all.__achievements_meta) delete all.__achievements_meta;
+			if (all.__achievements_unlocked) delete all.__achievements_unlocked;
+			this._saveAll(all);
 		}
 
 		_ensureStyles() {
